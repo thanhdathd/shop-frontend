@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 import {
   CButton,
   CCard,
@@ -56,12 +57,13 @@ class Login extends React.Component {
                 var user = res.data
                 console.log(JSON.stringify(user));
                 this.setState({passwordInvalid: false, emailInvalid: false});
+                this.props.dispatch({type: 'LOGIN', data: user})
             }else{
                 console.log('message:'+JSON.stringify(res))
                 if(res.statusText.startsWith('M')){
-                    this.setState({passwordInvalid: true, errorMessage: res.statusText});
+                    this.setState({passwordInvalid: true, emailInvalid: false, errorMessage: res.statusText});
                 }else{
-                    this.setState({emailInvalid: true, errorMessage: res.statusText});
+                    this.setState({passwordInvalid: false, emailInvalid: true, errorMessage: res.statusText});
                 }
             }
         })
@@ -146,4 +148,8 @@ class Login extends React.Component {
     }
 }
 
-export default Login
+function mapStateToProps(state){
+  return {isLoggedIn: state.isLoggedIn, userData: state.userData}
+}
+
+export default connect(mapStateToProps)(Login)

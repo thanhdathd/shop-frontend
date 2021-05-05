@@ -1,17 +1,22 @@
 import { createStore } from 'redux'
 
 const initialState = {
-  sidebarShow: 'responsive'
+  sidebarShow: 'responsive',
+  loading: true,
+  isLoggedIn: false,
+  userData: null,
 }
 
-const changeState = (state = initialState, { type, ...rest }) => {
+const reducer = (state = initialState, { type, ...rest }) => {
   switch (type) {
     case 'set':
       return {...state, ...rest }
+    case 'LOGIN':
+      return {...state, userData: rest.userData, isLoggedIn: true}
     default:
       return state
   }
 }
 
-const store = createStore(changeState)
+const store = createStore(reducer)
 export default store
