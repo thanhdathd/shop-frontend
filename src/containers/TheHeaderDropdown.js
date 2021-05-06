@@ -8,8 +8,22 @@ import {
   CImg
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import Cookies from 'js-cookie';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 const TheHeaderDropdown = () => {
+  const dispath = useDispatch();
+  const user = useSelector(state => state.userData);
+
+
+  const signOutClick = (evt) => {
+    console.log('data user from redux:'+JSON.stringify(user))
+    Cookies.remove("user");
+    Cookies.remove("isLoggedIn");
+    dispath({type: 'LOGIN', userData: null, isLoggedIn: false});
+  }
+
   return (
     <CDropdown
       inNav
@@ -72,17 +86,22 @@ const TheHeaderDropdown = () => {
         <CDropdownItem>
           <CIcon name="cil-credit-card" className="mfe-2" />
           Payments
-          <CBadge color="secondary" className="mfs-auto">42</CBadge>
+          <CBadge color="secondary" className="mfs-auto">12</CBadge>
         </CDropdownItem>
         <CDropdownItem>
           <CIcon name="cil-file" className="mfe-2" />
           Projects
-          <CBadge color="primary" className="mfs-auto">42</CBadge>
+          <CBadge color="primary" className="mfs-auto">32</CBadge>
         </CDropdownItem>
-        <CDropdownItem divider />
+        {/* <CDropdownItem divider />
         <CDropdownItem>
           <CIcon name="cil-lock-locked" className="mfe-2" />
           Lock Account
+        </CDropdownItem> */}
+        <CDropdownItem divider />
+        <CDropdownItem onClick={signOutClick}>
+          <CIcon name="cil-user" className="mfe-2" />
+          Signout
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

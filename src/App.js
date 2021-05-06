@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './scss/style.scss';
+import Cookies from 'js-cookie'
 
 const loading = (
   <div className="pt-3 text-center">
@@ -20,7 +21,19 @@ const Login = React.lazy(() => import('./views/pages/login/Login'));
 class App extends Component {
   constructor(props){
     super(props);
+  }
 
+  componentDidMount(){
+    this.getCookie()
+  }
+  
+  getCookie(){
+    const savedLogin = Cookies.get("user");
+    if(savedLogin){
+      this.props.dispatch({type: "LOGIN", userData: JSON.parse(savedLogin), isLoggedIn: true});
+    }else{
+      console.log('getCookie doesnt end up well')
+    }
   }
 
   render() {

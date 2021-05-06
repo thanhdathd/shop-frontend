@@ -12,7 +12,7 @@ const reducer = (state = initialState, { type, ...rest }) => {
     case 'set':
       return {...state, ...rest }
     case 'LOGIN':
-      return {...state, userData: rest.userData, isLoggedIn: true}
+      return {...state, userData: rest.userData, ...rest}
     default:
       return state
   }

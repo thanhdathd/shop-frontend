@@ -18,7 +18,12 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import axios from 'axios'
+import Cookies from 'js-cookie'
+
 const HOST = 'http://localhost:5000'
+
+
+
 
 
 
@@ -57,7 +62,9 @@ class Login extends React.Component {
                 var user = res.data
                 console.log(JSON.stringify(user));
                 this.setState({passwordInvalid: false, emailInvalid: false});
-                this.props.dispatch({type: 'LOGIN', data: user})
+                this.props.dispatch({type: 'LOGIN', userData: user, isLoggedIn: true})
+                Cookies.set("isLoggedIn", "true");
+                Cookies.set("user", JSON.stringify(user))
             }else{
                 console.log('message:'+JSON.stringify(res))
                 if(res.statusText.startsWith('M')){
