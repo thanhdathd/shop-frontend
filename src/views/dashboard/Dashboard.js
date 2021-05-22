@@ -381,8 +381,8 @@ const Dashboard = () => {
                         <span>Recurring</span> | Registered: Jan 1, 2015
                       </div>
                     </td>
-                    <td className="text-center">
-                      <CIcon height={25} name="cif-br" title="br" id="br" />
+                    <td className="text-center border-danger">
+                      <CIcon height={25} name="cif-br" title="br" id="br" className="border-danger" />
                     </td>
                     <td>
                       <div className="clearfix">

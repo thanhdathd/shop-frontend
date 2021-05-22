@@ -10,7 +10,7 @@ const _nav =  [
   },
   {
     _tag: 'CSidebarNavTitle',
-    _children: ['Theme']
+    _children: ['Shop']
   },
   {
     _tag: 'CSidebarNavItem',
@@ -20,14 +20,8 @@ const _nav =  [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Colors',
-    to: '/theme/colors',
-    icon: 'cil-drop',
-  },
-  {
-    _tag: 'CSidebarNavItem',
     name: 'Đồ uống',
-    to: '/theme/typography',
+    to: '/shop/product',
     icon: 'cil-pencil',
   },
   {
