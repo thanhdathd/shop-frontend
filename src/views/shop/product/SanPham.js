@@ -7,7 +7,7 @@ import {
   CCard,
   CCardHeader,
   CCardBody, CDataTable, CBadge, CPagination, CButton,
-  CLabel, CFormGroup, CInputRadio
+  CLabel, CFormGroup, CInputRadio, CListGroup
 } from '@coreui/react'
 import { rgbToHex } from '@coreui/utils'
 import axios from 'axios'
@@ -31,17 +31,23 @@ const SanPham = () => {
     const history = useHistory()
     const queryPage = useLocation().search.match(/page=([0-9]+)/, '')
     const _currentPage = Number(queryPage && queryPage[1] ? queryPage[1] : 1)
+    const queryCat = useLocation().search.match(/cat=([0-9]+)/, '')
+    const _currentCat = Number(queryCat && queryCat[1] ? queryCat[1] : -1)
 
     const [listProduct, setListProduct] = useState([])
     const [page, setPage] = useState(_currentPage)
     const [totalPage, setTotalPage] = useState(1)
-    const [catId, setCatId] = useState(-1)
+    const [catId, setCatId] = useState(_currentCat)
     const [catList, setCatList] = useState([])
 
 
     useEffect(() => {
         _currentPage !== page && setPage(_currentPage)
       }, [_currentPage, page])
+
+    useEffect(() => {
+        _currentCat !== catId && setCatId(_currentCat)
+    }, [_currentCat, catId])
 
     useEffect(() => {
         getPageData(page, catId)
@@ -60,7 +66,8 @@ const SanPham = () => {
     }, [])
 
     const pageChange = newPage => {
-        _currentPage !== newPage && history.push(`/shop/product?page=${newPage}`)
+        if(newPage == 0) newPage = 1
+        _currentPage !== newPage && history.push(`/shop/product?page=${newPage}&cat=${catId}`)
         //if(_currentPage !== newPage) setPage(newPage)
     }
 
@@ -69,7 +76,6 @@ const SanPham = () => {
         axios.get(`${HOST}/api/product/list?page=${page}&size=${PER_PAGE}&cat=${cat}`)
         .then(res => {
             if(res.status == 200){
-                console.log('product ok:'+JSON.stringify(res.data.items))
                 processList(res.data.items)
                 setListProduct(res.data.items)
                 setTotalPage(res.data.totalPages)
@@ -103,8 +109,6 @@ const SanPham = () => {
     const getPrice = (options) => {
         var price = 0
         options.forEach(op => {
-            console.log('get op: id:'+op.id)
-            console.log('get op: price:'+op.price)
             if(op.id === 0){
                  return price = op.price
             }
@@ -114,6 +118,12 @@ const SanPham = () => {
 
     const handleAddProduct = () => {
         console.log('you click mememmeme')
+    }
+
+    const handleFilterChange = (evt) => {
+        console.log('you select:'+evt.target.value)
+        setCatId(evt.target.value)
+        history.push(`/shop/product?page=${page}&cat=${evt.target.value}`)
     }
 
   return (
@@ -128,14 +138,17 @@ const SanPham = () => {
                             </CCol>
                             <CCol sm="9" className="py-2 text-right">
                                 <CFormGroup variant="custom-radio" inline>
-                                <CInputRadio custom checked id="inline-radio-1" name="inline-radios" value="-1" />
-                                <CLabel variant="custom-checkbox" htmlFor="inline-radio1">Tất cả</CLabel>
+                                <CInputRadio custom onChange={handleFilterChange}
+                                    checked={catId == -1} id="inline-radio-1"
+                                    name="inline-radios" value="-1" />
+                                <CLabel variant="custom-checkbox" htmlFor="inline-radio-1">Tất cả</CLabel>
                                 </CFormGroup>
                                 {catList.map((element, index) => {
                                     return (
                                         <CFormGroup variant="custom-radio" inline>
-                                            <CInputRadio custom id={"inline-radio"+element.id} name="inline-radios" value={element.id} />
-                                            <CLabel variant="custom-checkbox" htmlFor="inline-radio2">{element.name}</CLabel>
+                                            <CInputRadio custom onChange={handleFilterChange}
+                                                checked={catId == element.id} id={"inline-radio"+element.id} name="inline-radios" value={element.id} />
+                                            <CLabel variant="custom-checkbox" htmlFor={"inline-radio"+element.id}>{element.name}</CLabel>
                                         </CFormGroup>
                                     )
                                 })}
