@@ -27,7 +27,7 @@ const _nav =  [
   {
     _tag: 'CSidebarNavItem',
     name: 'Order',
-    to: '/theme/typography',
+    to: '/shop/order',
     icon: 'cil-pencil',
   },
   {

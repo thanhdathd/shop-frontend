@@ -5,6 +5,7 @@ const NguyenLieu = React.lazy(() => import('./views/shop/nguyenlieu/NguyenLieu')
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'));
 const SanPham = React.lazy(() => import('./views/shop/product/SanPham'));
 const ProductDetail = React.lazy(() => import('./views/shop/product/ProductDetail'));
+const Order = React.lazy(() => import('./views/shop/order/Order'));
 
 const routes = [
     { path: '/', exact: true, name: 'Home' },
@@ -15,6 +16,8 @@ const routes = [
     { path: '/shop/product/:id', exact: true, name: 'Chi tiết sản phẩm', component: ProductDetail },
     { path: '/theme', name: 'Theme', component: Colors, exact: true },
     { path: '/theme/colors', name: 'Colors', component: Colors },
+    { path: '/shop/order', exact: true, name: 'Order', component: Order },
+    { path: '/shop/order/:id', exact: true, name: 'Chi tiết', component: Colors },
 ];
 
 export default routes;
