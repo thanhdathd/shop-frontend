@@ -55,14 +55,21 @@ const ThemeColor = ({className, children}) => {
 
 const fields = [
     {key: 'id', _style: {width: '5%'}},
-    {key: 'name', _style: {width: '30%'}},
     {key: 'image', _style: {width: '10%'}},
+    {key: 'name', _style: {width: '30%'}},
     {key: 'option', _style: {width: '10%'}},
     {key: 'quantity', _style: {width: '10%'}},
     {key: 'price', _style: {width: '10%'}},
     {key: 'status', _style: {width: '10%'}},
     {key: 'action', _style: {width: '15%'}},
 ]
+const options = {
+  year: 'numeric', month: 'numeric', day: 'numeric',
+  hour: 'numeric', minute: 'numeric', second: 'numeric',
+  hour12: false,
+  timeZone: 'America/Los_Angeles'
+};
+const formater = new Intl.DateTimeFormat('en-US', options)
 
 
 const Order = () => {
@@ -79,6 +86,8 @@ const [totalPage, setTotalPage] = useState(1)
 
 useEffect(() => {
     _currentPage !== page && setPage(_currentPage)
+    var time = formater.format('2021-04-28T09:35:23.000Z')
+    console.log('time:'+time)
   }, [_currentPage, page])
 
 useEffect(() => {
@@ -102,6 +111,9 @@ const pageChange = newPage => {
     _currentPage !== newPage && history.push(`/shop/order?page=${newPage}`)
     //if(_currentPage !== newPage) setPage(newPage)
 }
+
+
+//console.log(new Intl.DateTimeFormat('en-US', options).format(date));
 
   return (
     <>
@@ -148,7 +160,7 @@ const pageChange = newPage => {
                                 'name': (item) => (
                                     <td>
                                         <div className="font-weight-bold">{item.name}</div>
-                                        {/* <div className="small text-muted">Options: {item.optionString}</div> */}
+                                        <div className="small text-muted">Staff: {item.staffName} | {item.createdAt}</div>
                                     </td>
                                 ),
                                 'price': (item) => (
