@@ -19,8 +19,8 @@ const WidgetsDropdown = () => {
       <CCol sm="6" lg="3">
         <CWidgetDropdown
           color="gradient-primary"
-          header="9.823"
-          text="Members online"
+          header="982"
+          text="Cà phê"
           footerSlot={
             <ChartLineSimple
               pointed
@@ -51,7 +51,7 @@ const WidgetsDropdown = () => {
         <CWidgetDropdown
           color="gradient-info"
           header="9.823"
-          text="Members online"
+          text="Mua online"
           footerSlot={
             <ChartLineSimple
               pointed
@@ -82,8 +82,8 @@ const WidgetsDropdown = () => {
       <CCol sm="6" lg="3">
         <CWidgetDropdown
           color="gradient-warning"
-          header="9.823"
-          text="Members online"
+          header="1145"
+          text="Trà sữa & sinh tố"
           footerSlot={
             <ChartLineSimple
               className="mt-3"
@@ -114,8 +114,8 @@ const WidgetsDropdown = () => {
       <CCol sm="6" lg="3">
         <CWidgetDropdown
           color="gradient-danger"
-          header="9.823"
-          text="Members online"
+          header="2502"
+          text="Nước trái cây"
           footerSlot={
             <ChartBarSimple
               className="mt-3 mx-3"
