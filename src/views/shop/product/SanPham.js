@@ -117,7 +117,8 @@ const SanPham = () => {
     }
 
     const handleAddProduct = () => {
-        console.log('you click mememmeme')
+        //console.log('you click mememmeme')
+        
     }
 
     const handleFilterChange = (evt) => {
