@@ -6,6 +6,7 @@ const Colors = React.lazy(() => import('./views/theme/colors/Colors'));
 const SanPham = React.lazy(() => import('./views/shop/product/SanPham'));
 const ProductDetail = React.lazy(() => import('./views/shop/product/ProductDetail'));
 const Order = React.lazy(() => import('./views/shop/order/Order'));
+const OrderDetail = React.lazy(() => import('./views/shop/order/OrderDetail'));
 
 const routes = [
     { path: '/', exact: true, name: 'Home' },
@@ -17,7 +18,7 @@ const routes = [
     { path: '/theme', name: 'Theme', component: Colors, exact: true },
     { path: '/theme/colors', name: 'Colors', component: Colors },
     { path: '/shop/order', exact: true, name: 'Order', component: Order },
-    { path: '/shop/order/:id', exact: true, name: 'Chi tiết', component: Colors },
+    { path: '/shop/order/:id', exact: true, name: 'Chi tiết', component: OrderDetail },
 ];
 
 export default routes;

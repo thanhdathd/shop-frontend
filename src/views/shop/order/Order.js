@@ -6,7 +6,8 @@ import {
   CCol,
   CCard,
   CCardHeader,
-  CCardBody, CDataTable, CBadge, CButton, CPagination
+  CCardBody, CDataTable, CBadge, CButton, CPagination, CListGroup,
+  CFormGroup, CInputRadio, CLabel, CSelect
 } from '@coreui/react'
 import { rgbToHex } from '@coreui/utils'
 import axios from 'axios'
@@ -20,11 +21,9 @@ const PER_PAGE = 10;
 
 const fields = [
     {key: 'id', _style: {width: '5%'}},
-    {key: 'image', _style: {width: '10%'}},
-    {key: 'name', _style: {width: '30%'}},
-    {key: 'option', _style: {width: '10%'}},
-    {key: 'quantity', _style: {width: '10%'}},
-    {key: 'price', label: 'Payment',  _style: {width: '10%'}},
+    {key: 'name', _style: {width: '20%'}},
+    {key: 'content', label: 'Content', _style: {width: '25%'}},
+    {key: 'price', label: 'Payment',  _style: {width: '15%'}},
     {key: 'status', _style: {width: '10%'}},
     {key: 'action', _style: {width: '15%'}},
 ]
@@ -44,8 +43,8 @@ const Order = () => {
 
 const [listOrder, setListOrder] = useState([])
 const [page, setPage] = useState(_currentPage)
-const [filter, setFilter] = useState({})
-const [orderBy, setOrderBy] = useState({key: 'date'})
+const [filter, setFilter] = useState('all')
+const [orderBy, setOrderBy] = useState('DESC')
 const [totalPage, setTotalPage] = useState(1)
 
 
@@ -57,14 +56,16 @@ useEffect(() => {
 
 useEffect(() => {
     getPageData(page, filter, orderBy)
-}, [page])
+}, [page, filter, orderBy])
 
 const getPageData = (page, filter, orderBy) => {
-    axios.get(`${HOST}/api/order/list?page=${page}&size=${PER_PAGE}`)
+    console.log('--> getPage: page'+page+', fil:'+filter+", by:"+orderBy)
+    axios.get(`${HOST}/api/order/list?page=${page}&size=${PER_PAGE}&filter=${filter}&order=${orderBy}`)
     .then(res => {
         if(res.status == 200){
             console.log('tai orrder list thanh cong');
             preProcess(res.data.items)
+            console.log('---->'+JSON.stringify(res.data.items[0]))
             setListOrder(res.data.items)
             setTotalPage(res.data.totalPages)
         }else{
@@ -77,18 +78,42 @@ const preProcess = (listData) => {
   listData.forEach(d => {
     d.time = moment(d.createdAt).format('hh:mm DD/MM/yyyy');
     var price = 0
+   var content = ''
+   var count = 0;
+    var len = d.listProduct.length
     d.listProduct.forEach(p => {
-      price += p.price
+      price += p.price;
+      content = content + p.name + ' x'+p.quantity;
+     if(count < len-1) content = content + ", ";
+     count = count + 1;
     });
     d.price = price
+    d.content = content
   })
 }
 
+const getStatusColor = (status) => {
+    switch(status){
+        case 'new' : return 'secondary'
+        case 'done' : return 'success'
+        case 'carry' : return 'light'
+        default: return 'info'
+    }
+}
+
 const pageChange = newPage => {
+    if(newPage == 0) newPage = 1
     _currentPage !== newPage && history.push(`/shop/order?page=${newPage}`)
     //if(_currentPage !== newPage) setPage(newPage)
 }
 
+const handleFilterChange = (evt) => {
+    filter !== evt.target.value && setFilter(evt.target.value)
+}
+
+const handleSelect = (evt) => {
+    setOrderBy(evt.target.value)
+}
 
 //console.log(new Intl.DateTimeFormat('en-US', options).format(date));
 
@@ -99,24 +124,37 @@ const pageChange = newPage => {
                 <CCard>
                     <CCardHeader>
                         <CRow>
-                            <CCol sm="3">
+                            <CCol sm="4">
                                 <h2>Orders</h2>
                             </CCol>
-                            {/* <CCol sm="9" className="py-2 text-right">
+                            <CCol sm="2" className="text-right my-auto">
+                                <CLabel htmlFor="selectSm">Sắp xếp</CLabel>
+                            </CCol>
+                            <CCol sm="2"  className="py-2">
+                                <CSelect custom size="sm" name="selectSm" id="SelectLm" onChange={handleSelect}>
+                                    <option selected value="DESC">Mới nhất</option>
+                                    <option value="ASC">Cũ nhất</option>
+                                </CSelect>
+                            </CCol>
+                            <CCol sm="4" className="py-2 text-right">
                                 <CFormGroup variant="custom-radio" inline>
-                                <CInputRadio custom checked id="inline-radio-1" name="inline-radios" value="-1" />
-                                <CLabel variant="custom-checkbox" htmlFor="inline-radio1">Tất cả</CLabel>
+                                <CInputRadio custom checked={filter == 'all'} onChange={handleFilterChange}
+                                 id="inline-radio-1" name="inline-radios" value="all" />
+                                <CLabel variant="custom-checkbox" htmlFor="inline-radio-1">Tất cả</CLabel>
                                 </CFormGroup>
-                                {catList.map((element, index) => {
-                                    return (
-                                        <CFormGroup variant="custom-radio" inline>
-                                            <CInputRadio custom id={"inline-radio"+element.id} name="inline-radios" value={element.id} />
-                                            <CLabel variant="custom-checkbox" htmlFor="inline-radio2">{element.name}</CLabel>
-                                        </CFormGroup>
-                                    )
-                                })}
-                                
-                            </CCol> */}
+                                <CFormGroup variant="custom-radio" inline>
+                                    <CInputRadio custom onChange={handleFilterChange}
+                                    checked={filter == 'new'}
+                                     id={"inline-radio1"} name="inline-radios" value='new' />
+                                    <CLabel variant="custom-checkbox" htmlFor="inline-radio1">Mới</CLabel>
+                                </CFormGroup>
+                                <CFormGroup variant="custom-radio" inline>
+                                    <CInputRadio custom onChange={handleFilterChange}
+                                    checked={filter == 'done'}
+                                    id={"inline-radio2"} name="inline-radios" value='done' />
+                                    <CLabel variant="custom-checkbox" htmlFor="inline-radio2">Đã xong</CLabel>
+                                </CFormGroup>
+                            </CCol>
                         </CRow>
                     </CCardHeader>
                     <CCardBody>
@@ -125,31 +163,35 @@ const pageChange = newPage => {
                             fields={fields}
                             itemsPerPage={PER_PAGE}
                             scopedSlots = {{
-                                'image': (item) => (
-                                <td className="border">
-                                        <img
-                                            width={50}
-                                            className="mx-auto rounded"
-                                            src={`${HOST}${item.image}`}
-                                            alt={item.image} />
-                                </td>
+                                'id': (item) => (
+                                    <td className='small'>
+                                        {item.id}
+                                    </td>
                                 ),
                                 'name': (item) => (
-                                    <td>
+                                    <td style={{padding: 5}}>
                                         <div className="font-weight-bold">{item.name}</div>
-                                        <div className="small text-muted">Staff: {item.staffName} | {item.time}</div>
+                                        <div className="small text-muted">Staff: {item.staffName}</div>
+                                        <div className="small text-muted">{item.time}</div>
+                                    </td>
+                                ),
+                                'content': (item) => (
+                                    <td>
+                                        <p className="small text-muted">
+                                            {item.content}
+                                        </p>
                                     </td>
                                 ),
                                 'price': (item) => (
                                     <td>
-                                        <div className="font-weight-bold text-muted">{item.price}</div>
+                                        <div className="font-weight-bold text-muted">{item.price} đ</div>
                                     </td>
                                 ),
                                 'status':
                                 (item)=>(
                                     <td>
-                                    <CBadge color={'success'}>
-                                        {'good'}
+                                    <CBadge color={getStatusColor(item.status)}>
+                                        {item.status}
                                     </CBadge>
                                     </td>
                                 ),
