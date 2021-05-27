@@ -27,15 +27,23 @@ const OrderDetail = ({match}) => {
 
   return (
     <CRow>
-      <CCol>
+      <CCol sm="6">
         <CCard>
           <CCardHeader>
-            Order id: {match.params.id}
+            <div className="d-inline-flex w-100">
+              <h3 className="w-50 my-auto">{order.name}</h3>
+              <span className="w-50 text-right text-muted">ID: {match.params.id}</span>
+            </div>
           </CCardHeader>
           <CCardBody>
-              <pre>
-                  {JSON.stringify(order)}
-              </pre>
+            <div className="d-inline-flex w-100">
+              <span className="w-50 text-right font-weight-bold">Người tạo:</span>
+              <span className="w-50 text-right">{order.staffName}</span>
+            </div>
+            <div className="d-inline-flex w-100">
+              <span className="w-50 text-right font-weight-bold">Số điện thoại:</span>
+              <span className="w-50 text-right">{order.staffName}</span>
+            </div>
           </CCardBody>
         </CCard>
       </CCol>
