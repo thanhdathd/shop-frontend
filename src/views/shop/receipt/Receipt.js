@@ -207,7 +207,7 @@ const handleSelect = (evt) => {
                                             variant="outline"
                                             shape="square"
                                             size="sm"
-                                            onClick={() => history.push(`/shop/order/${item.id}`)}
+                                            onClick={() => history.push(`/shop/receipt/${item.id}`)}
                                         >
                                         Chi tiết
                                         </CButton> 

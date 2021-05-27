@@ -8,6 +8,7 @@ const ProductDetail = React.lazy(() => import('./views/shop/product/ProductDetai
 const Order = React.lazy(() => import('./views/shop/order/Order'));
 const OrderDetail = React.lazy(() => import('./views/shop/order/OrderDetail'));
 const Receipt = React.lazy(() => import('./views/shop/receipt/Receipt'));
+const ReceiptDetail = React.lazy(() => import('./views/shop/receipt/ReceiptDetail'));
 
 const routes = [
     { path: '/', exact: true, name: 'Home' },
@@ -21,7 +22,7 @@ const routes = [
     { path: '/shop/order', exact: true, name: 'Order', component: Order },
     { path: '/shop/order/:id', exact: true, name: 'Chi tiết', component: OrderDetail },
     { path: '/shop/receipt', exact: true, name: 'Hóa đơn', component: Receipt },
-    { path: '/shop/receipt/:id', exact: true, name: 'Chi tiết', component: OrderDetail },
+    { path: '/shop/receipt/:id', exact: true, name: 'Chi tiết', component: ReceiptDetail },
 ];
 
 export default routes;
